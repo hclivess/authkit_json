@@ -5,9 +5,14 @@ import json
 import random
 
 
+def hashify(data):
+    hashified = blake2b(data.encode(), digest_size=15).hexdigest()
+    return hashified
+
+
 def load_user_db(username):
     try:
-        with open(f"users/{username}.json", "r") as infile:
+        with open(f"users/{hashify(username)}.json", "r") as infile:
             user_data_dict = json.loads(infile.read())
             return user_data_dict
     except Exception as e:
@@ -18,7 +23,7 @@ def save_user(username, data):
     if not os.path.exists("users"):
         os.mkdir("users")
     try:
-        with open(f"users/{username}.json", "w") as outfile:
+        with open(f"users/{hashify(username)}.json", "w") as outfile:
             outfile.write(json.dumps(data))
             return True
     except Exception as e:

@@ -33,10 +33,17 @@ class LoginHandler(BaseHandler):
             self.render("notfound.html")
 
 
+class LogoutHandler(BaseHandler):
+    def get(self):
+        self.clear_all_cookies()
+        self.redirect("/")
+
+
 def make_app():
     return tornado.web.Application([
         (r"/", MainHandler),
         (r"/login(.*)", LoginHandler),
+        (r"/logout", LogoutHandler),
     ])
 
 
